@@ -1,0 +1,15 @@
+# kubectl create secret generic mssql --from-literal=SA_PASSWORD="pa55w0rd!"
+# Apply this command on the commmandline after doing kubectl apply -f local-pvc.yaml
+
+# This file is the config for persistent volume claim. 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mssql-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Mi
+ 

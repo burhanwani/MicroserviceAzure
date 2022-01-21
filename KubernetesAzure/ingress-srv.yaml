@@ -1,0 +1,36 @@
+#The nginx controller runs in a different namespace. To get services and pods running in the Kubernetes,
+#we need to specify the namespace as well. THis is after we deploy the container using the following command:
+#kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.4/deploy/static/provider/cloud/deploy.yaml
+# The above command sits at : https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop 
+#kubectl --namespace=ingress-nginx get pods
+
+
+#acme.com will reroute to our local host. We need to make changes in the local host config file as well
+# for this to happen. The location is at Windows/System32/drivers/etc/hosts
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+    - host: dotnet.40.118.205.203.nip.io
+      http:
+        paths:
+          - path: /api/platforms
+            pathType: Prefix
+            backend:
+              service:
+                name: platforms-clusterip-srv
+                port:
+                  number: 80
+          - path: /api/c/platforms
+            pathType: Prefix
+            backend:
+              service:
+                name: commands-clusterip-srv
+                port:
+                  number: 80
+
